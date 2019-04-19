@@ -1,7 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, View, Button} from 'react-native';
-import Auth0 from 'react-native-auth0';
-const auth0 = new Auth0({ domain: 'dev-jtz30gjo.auth0.com', clientId: 'TycB4FnANIYdLXKXOdtDUG77TPv6oxTt'});
+import auth0 from 'react-native-auth0';
+
+const auth0Domain = 'https://dev-jtz30gjo.auth0.com';
+
 
 export default class LoginScreen extends React.Component {
     constructor(props) {
@@ -9,17 +11,19 @@ export default class LoginScreen extends React.Component {
         this.state = {
           mobileNumber: ''
         };
+    }
 
+    login = async () => {
       auth0
         .webAuth
-        .authorize({scope: 'openid profile email', audience: 'https://dev-jtz30gjo.auth0.com/userinfo'})
-        .then(credentials =>
-            console.log(credentials)
-          // Successfully authenticated
-          // Store the accessToken
-        )
-        .catch(error => console.log(error));
-    }
+        .authorize({ scope: 'openid profile email', audience: `${auth0Domain}/userinfo`})
+        .then( credentails => {
+          console.log(credentails)
+        }).catch( error => {
+          console.log(error)
+      })
+    };
+
     render() {
         return (
           <View style={styles.container}>
@@ -30,7 +34,7 @@ export default class LoginScreen extends React.Component {
                         onChangeText={ mobileNumber => this.setState({ mobileNumber }) }>
                         { this.state.mobileNumber }
             </TextInput>
-            <Button title="Login" onPress={ () => this.props.navigation.navigate('OTPVerify')}/>
+            <Button title="Login" onPress={this.login}/>
           </View>
         );
       }
