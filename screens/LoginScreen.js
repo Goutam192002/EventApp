@@ -1,28 +1,39 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View, Button} from 'react-native';
-import auth0 from 'react-native-auth0';
-
-const auth0Domain = 'https://dev-jtz30gjo.auth0.com';
-
+import {StyleSheet, Text, TextInput, View, Button, Modal} from 'react-native';
+import axios from 'axios';
 
 export default class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          mobileNumber: ''
+          mobileNumber: '',
+          showError: false,
+          error: ''
         };
     }
 
-    login = async () => {
-      auth0
-        .webAuth
-        .authorize({ scope: 'openid profile email', audience: `${auth0Domain}/userinfo`})
-        .then( credentails => {
-          console.log(credentails)
-        }).catch( error => {
-          console.log(error)
+    login = () => {
+      const baseURL = 'http://192.168.43.166:10010/authenticate';
+      console.log(this.state.mobileNumber);
+      axios.post(baseURL, {
+        mobileNumber: this.state.mobileNumber
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then( response => {
+        const { OTP } = response.data;
+        console.log(OTP);
+        this.props.navigation.navigate('verifyOTP', { OTP: OTP })
+      }).catch( error => {
+        this.setState({ error: error.toString()});
+        this.showErrorDialog();
       })
     };
+
+    showErrorDialog() {
+      this.setState({ showError: true})
+    }
 
     render() {
         return (
@@ -31,10 +42,16 @@ export default class LoginScreen extends React.Component {
             <TextInput style={ styles.inputControl }
                         keyboardType="numeric"
                         placeholder="Enter your mobile number"
-                        onChangeText={ mobileNumber => this.setState({ mobileNumber }) }>
+                        onChangeText={ mobileNumber => this.setState({ mobileNumber: mobileNumber }) }>
                         { this.state.mobileNumber }
             </TextInput>
             <Button title="Login" onPress={this.login}/>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={ this.state.showError }>
+                <Text>{ this.state.error }</Text>
+            </Modal>
           </View>
         );
       }
