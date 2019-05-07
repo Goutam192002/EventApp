@@ -37,7 +37,6 @@ export default class LoginScreen extends React.Component{
         return (
           <Container>
               <Content>
-
                   <Text style={ { textAlign: 'center' } }>Login App</Text>
                   <Form>
                       <Item rounded>
