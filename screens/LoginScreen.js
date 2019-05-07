@@ -1,76 +1,64 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View, Button, Modal} from 'react-native';
+import {Toast, Container, Button, Content, Text, Input, Form, Item} from "native-base";
 import axios from 'axios';
 
-export default class LoginScreen extends React.Component {
+export default class LoginScreen extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-          mobileNumber: '',
-          showError: false,
+          email: '',
+          password: '',
           error: ''
         };
     }
 
     login = () => {
-      const baseURL = 'http://192.168.43.166:10010/authenticate';
-      console.log(this.state.mobileNumber);
+      const baseURL = 'http://192.168.43.166:10010/users/authenticate';
       axios.post(baseURL, {
-        mobileNumber: this.state.mobileNumber
+          email: this.state.password,
+          password: this.state.password
       }, {
         headers: {
           'Content-Type': 'application/json'
         }
       }).then( response => {
-        const { OTP } = response.data;
-        console.log(OTP);
-        this.props.navigation.navigate('verifyOTP', { OTP: OTP })
+        const { token } = response.data;
+        console.log(token);
+        this.props.navigation.navigate('')
       }).catch( error => {
-        this.setState({ error: error.toString()});
-        this.showErrorDialog();
+        Toast.show({
+            text: error.toString(),
+            buttonText: 'Hide'
+        });
       })
     };
 
-    showErrorDialog() {
-      this.setState({ showError: true})
-    }
-
     render() {
         return (
-          <View style={styles.container}>
-            <Text>Login App</Text>
-            <TextInput style={ styles.inputControl }
-                        keyboardType="numeric"
-                        placeholder="Enter your mobile number"
-                        onChangeText={ mobileNumber => this.setState({ mobileNumber: mobileNumber }) }>
-                        { this.state.mobileNumber }
-            </TextInput>
-            <Button title="Login" onPress={this.login}/>
-            <Modal
-              animationType="slide"
-              transparent={false}
-              visible={ this.state.showError }>
-                <Text>{ this.state.error }</Text>
-            </Modal>
-          </View>
+          <Container>
+              <Content>
+
+                  <Text style={ { textAlign: 'center' } }>Login App</Text>
+                  <Form>
+                      <Item rounded>
+                          <Input keyboardType="email-address"
+                                 placeholder="Enter your email address"
+                                 onChangeText={ email => this.setState({ email: email }) } />
+                      </Item>
+                      <Item last rounded>
+                          <Input secureTextEntry={true}
+                                 placeholder="Enter your password"
+                                 onChangeText={ password => this.setState({ password: password }) } />
+                      </Item>
+                  </Form>
+                  <Button rounded onPress={this.login}>
+                      <Text>Login</Text>
+                  </Button>
+                  <Button rounded onPress={ () => {this.props.navigation.navigate('signup') } } >
+                      <Text>Create a new account </Text>
+                  </Button>
+              </Content>
+          </Container>
         );
       }
 }
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    inputControl: {
-      width: '60%',
-      margin: 15,
-      height: 40,
-      paddingLeft: 6,
-      borderRadius: 5,
-      borderColor: '#000000',
-      borderWidth: 1
-    }
-});
