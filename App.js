@@ -6,10 +6,12 @@ import { Ionicons } from '@expo/vector-icons';
 import AppLoading from "expo/build/launch/AppLoading";
 import { Root } from "native-base";
 import SignupScreen from "./screens/SignupScreen";
+import HomeScreen from "./screens/HomeScreen";
 
 const AppNavigator = createStackNavigator({
   login: { screen: LoginScreen },
-  signup: { screen: SignupScreen }
+  signup: { screen: SignupScreen },
+  home: { screen: HomeScreen }
 });
 
 const AppContainer = createAppContainer(AppNavigator);

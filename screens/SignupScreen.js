@@ -14,7 +14,7 @@ export default class SignupScreen extends  React.Component {
     }
 
     signup = () => {
-        axios.post('http://localhost:3000/users/', this.state, {
+        axios.post('http://192.168.43.166:3000/users/', this.state, {
             headers: {
                 'Content-Type': 'application/json'
             }

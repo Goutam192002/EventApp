@@ -13,18 +13,18 @@ export default class LoginScreen extends React.Component{
     }
 
     login = () => {
-      const baseURL = 'http://192.168.43.166:10010/users/authenticate';
+      const baseURL = 'http://192.168.43.166:3000/users/signin';
       axios.post(baseURL, {
-          email: this.state.password,
+          email: this.state.email,
           password: this.state.password
       }, {
         headers: {
           'Content-Type': 'application/json'
         }
       }).then( response => {
-        const { token } = response.data;
+        const token = response.data;
         console.log(token);
-        this.props.navigation.navigate('')
+        this.props.navigation.navigate('home')
       }).catch( error => {
         Toast.show({
             text: error.toString(),
