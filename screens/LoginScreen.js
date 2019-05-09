@@ -1,6 +1,7 @@
 import React from 'react';
 import {Toast, Container, Button, Content, Text, Input, Form, Item} from "native-base";
 import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 export default class LoginScreen extends React.Component{
     constructor(props) {
@@ -23,7 +24,21 @@ export default class LoginScreen extends React.Component{
         }
       }).then( response => {
         const token = response.data;
+        axios.get('http://192.168.43.166:3000/users/loggedInUser', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }).then( async user => {
+            await AsyncStorage.setItem('user', JSON.stringify(user))
+        }).catch( error => {
+            Toast.show({
+                text: error.toString(),
+                buttonText: 'hide'
+            })
+        });
         console.log(token);
+        AsyncStorage.setItem('authToken', token);
         this.props.navigation.navigate('home')
       }).catch( error => {
         Toast.show({

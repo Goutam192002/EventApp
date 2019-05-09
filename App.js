@@ -11,7 +11,9 @@ import HomeScreen from "./screens/HomeScreen";
 const AppNavigator = createStackNavigator({
   login: { screen: LoginScreen },
   signup: { screen: SignupScreen },
-  home: { screen: HomeScreen }
+  home: { screen: HomeScreen },
+}, {
+  initialRouteName: "home"
 });
 
 const AppContainer = createAppContainer(AppNavigator);
@@ -33,6 +35,7 @@ export default class App extends React.Component {
     });
     this.setState({ loading: false })
   }
+
   render() {
     if(this.state.loading) {
       return <AppLoading />
