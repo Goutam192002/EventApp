@@ -7,11 +7,15 @@ import AppLoading from "expo/build/launch/AppLoading";
 import { Root } from "native-base";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
+import createEventScreen from "./screens/createEventScreen";
+import inviteUsersScreen from "./screens/inviteUsersScreen";
 
 const AppNavigator = createStackNavigator({
   login: { screen: LoginScreen },
   signup: { screen: SignupScreen },
   home: { screen: HomeScreen },
+  createEvent: { screen: createEventScreen },
+  invitePeople: { screen: inviteUsersScreen}
 }, {
   initialRouteName: "home"
 });

@@ -29,8 +29,8 @@ export default class LoginScreen extends React.Component{
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
-        }).then( async user => {
-            await AsyncStorage.setItem('user', JSON.stringify(user))
+        }).then( async response => {
+            await AsyncStorage.setItem('user', JSON.stringify(response.data))
         }).catch( error => {
             Toast.show({
                 text: error.toString(),
