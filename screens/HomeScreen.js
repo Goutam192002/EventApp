@@ -49,7 +49,7 @@ export default class LoginScreen extends React.Component {
                         direction="up"
                         position="bottomRight"
                         onPress={ () => this.props.navigation.navigate('createEvent') } >
-                        <Icon name="ios-add" />
+                        <Icon name="md-add" />
                     </Fab>
                 </Container>
             )

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Container, Form, Input, Item, Text, Textarea} from "native-base";
 import { AsyncStorage } from 'react-native';
+import axios from 'axios';
 
 export default class createEventScreen extends React.Component{
 
@@ -18,8 +19,9 @@ export default class createEventScreen extends React.Component{
 
     async componentWillMount() {
         try {
-            const user = await AsyncStorage.getItem('user');
+            const user = JSON.parse(await AsyncStorage.getItem('user'));
             const authToken = await AsyncStorage.getItem('authToken');
+            this.setState({ createdBy: user.id });
             this.setState({ user: user});
             this.setState({ authToken: authToken});
         } catch (error) {
@@ -27,11 +29,28 @@ export default class createEventScreen extends React.Component{
         }
     }
 
-    createEvent () {}
+    createEvent =  () => {
+        axios.post('http://192.168.43.166:3000/events',{
+            title: this.state.title,
+            description: this.state.description,
+            createdBy: this.state.createdBy,
+            invites: this.state.invites
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+               'Authorization': `Bearer ${this.state.authToken}`
+            }
+        }).then( response => {
+            console.log(response.data);
+            this.props.navigation.navigate('home')
+        }).catch( error => {
+            console.log(error)
+        })
+    };
 
-    addInvite = async username => {
+    addInvite = async users => {
         await this.setState({
-            invites: [...this.state.invites, username]
+            invites: [...this.state.invites, ...users]
         });
     };
     render() {
@@ -52,7 +71,8 @@ export default class createEventScreen extends React.Component{
                     </Item>
                 </Form>
                 <Button rounded onPress={ () => { this.props.navigation.navigate('invitePeople', {
-                    addInvite: this.addInvite
+                    addInvite: this.addInvite,
+                    invites: this.state.invites
                 }) }}>
                     <Text>Invite People</Text>
                 </Button>
