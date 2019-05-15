@@ -32,42 +32,42 @@ export default class SignupScreen extends  React.Component {
 
     render() {
         return (
-            <Container>
+            <Container style={styles.space}>
                 <Content>
                     <Text style={ { textAlign: 'center' } }>Create an account</Text>
-                    <Form>
-                        <Item rounded>
+                    <Form style={styles.space}>
+                        <Item rounded style={styles.space}>
                             <Input keyboardType="default"
                                    placeholder="Enter your name"
                                    onChangeText={ name => this.setState({ name: name }) } />
                         </Item>
 
-                        <Item rounded>
+                        <Item rounded style={styles.space}>
                             <Input keyboardType="default"
                                    placeholder="Enter your username"
                                    onChangeText={ username => this.setState({ username: username }) } />
                         </Item>
 
-                        <Item rounded>
+                        <Item rounded style={styles.space}>
                             <Input keyboardType="email-address"
                                    placeholder="Enter your email address"
                                    onChangeText={ email => this.setState({ email: email }) } />
                         </Item>
-                        <Item rounded>
+                        <Item rounded style={styles.space}>
                             <Input secureTextEntry={true}
                                    placeholder="Enter your password"
                                    onChangeText={ password => this.setState({ password: password }) } />
                         </Item>
-                        <Item last rounded>
+                        <Item last rounded style={styles.space}>
                             <Input secureTextEntry={true}
                                    placeholder="Confirm your password"
                                    onChangeText={ password => this.setState({ password: password }) } />
                         </Item>
                     </Form>
-                    <Button rounded onPress={this.signup}>
+                    <Button rounded onPress={this.signup} style={styles.space}>
                         <Text>Continue</Text>
                     </Button>
-                    <Button rounded onPress={ () => {this.props.navigation.navigate('login') } } >
+                    <Button style={styles.space} rounded onPress={ () => {this.props.navigation.navigate('login') } } >
                         <Text>Already have an account</Text>
                     </Button>
                 </Content>
@@ -75,3 +75,9 @@ export default class SignupScreen extends  React.Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    space: {
+        margin: 5
+    }
+});

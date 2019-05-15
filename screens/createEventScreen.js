@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Container, Form, Input, Item, Text, Textarea} from "native-base";
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, StyleSheet } from 'react-native';
 import axios from 'axios';
 
 export default class createEventScreen extends React.Component{
@@ -55,28 +55,28 @@ export default class createEventScreen extends React.Component{
     };
     render() {
         return (
-            <Container>
+            <Container style={styles.space}>
                 <Text>Create An Event </Text>
                 <Form>
-                    <Item rounded>
+                    <Item rounded style={styles.space}>
                         <Input keyboardType="default"
                                placeholder="Enter the event title"
                                onChangeText={ title => this.setState({ title: title }) } />
                     </Item>
 
-                    <Item rounded>
+                    <Item rounded style={styles.space}>
                         <Textarea keyboardType="default"
                                placeholder="Enter the event description"
                                onChangeText={ description => this.setState({ description: description }) } />
                     </Item>
                 </Form>
-                <Button rounded onPress={ () => { this.props.navigation.navigate('invitePeople', {
+                <Button style={styles.space} rounded onPress={ () => { this.props.navigation.navigate('invitePeople', {
                     addInvite: this.addInvite,
                     invites: this.state.invites
                 }) }}>
                     <Text>Invite People</Text>
                 </Button>
-                <Button rounded onPress={this.createEvent}>
+                <Button style={styles.space} rounded onPress={this.createEvent}>
                     <Text>Create Event</Text>
                 </Button>
             </Container>
@@ -84,4 +84,9 @@ export default class createEventScreen extends React.Component{
     }
 }
 
+const styles = StyleSheet.create({
+    space: {
+        margin: 5,
+    }
+});
 

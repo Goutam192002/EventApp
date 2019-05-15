@@ -20,7 +20,6 @@ export default class createdEvents extends React.Component {
                 'Content-Type': 'application/json'
             }
         }).then( response => {
-            console.log(response.data);
             this.setState({ events: response.data })
         })
     };
