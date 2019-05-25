@@ -1,9 +1,9 @@
 import React from 'react';
 import {Body, Container, ListItem, Text, List, Left, Right} from "native-base";
-import { AsyncStorage} from 'react-native';
 import axios from 'axios';
+import {connect} from "react-redux";
 
-export default class invitedEvents extends React.Component {
+class invitedEvents extends React.Component {
 
     constructor(props) {
         super(props);
@@ -13,8 +13,7 @@ export default class invitedEvents extends React.Component {
     }
 
     componentWillMount = async () => {
-        const user = JSON.parse(await AsyncStorage.getItem('user'));
-        const authToken = await AsyncStorage.getItem('authToken');
+        const user = this.props.user.user;
         axios.get(`http://192.168.43.166:3000/users/${user.id}/invites`, {
             headers: {
                 'Content-Type': 'application/json'
@@ -50,3 +49,10 @@ export default class invitedEvents extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    const { user } = state;
+    return user;
+};
+
+export default connect(mapStateToProps)(invitedEvents)

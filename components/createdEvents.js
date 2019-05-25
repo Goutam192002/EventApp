@@ -1,9 +1,9 @@
 import React from 'react';
 import { Container, Text, List, ListItem, Body } from "native-base";
 import axios from 'axios';
-import { AsyncStorage } from 'react-native';
+import {connect} from "react-redux";
 
-export default class createdEvents extends React.Component {
+class createdEvents extends React.Component {
 
     constructor(props) {
         super(props);
@@ -13,8 +13,7 @@ export default class createdEvents extends React.Component {
     }
 
     componentWillMount = async () => {
-        const user = JSON.parse(await AsyncStorage.getItem('user'));
-        const authToken = await AsyncStorage.getItem('authToken');
+        const user = this.props.user.user;
         axios.get(`http://192.168.43.166:3000/users/${user.id}/createdEvents`, {
             headers: {
                 'Content-Type': 'application/json'
@@ -45,3 +44,10 @@ export default class createdEvents extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    const { user } = state;
+    return user;
+};
+
+export default connect(mapStateToProps)(createdEvents);

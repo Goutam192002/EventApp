@@ -10,6 +10,12 @@ import HomeScreen from "./screens/HomeScreen";
 import createEventScreen from "./screens/createEventScreen";
 import inviteUsersScreen from "./screens/inviteUsersScreen";
 
+import {connect, Provider} from 'react-redux';
+import {bindActionCreators, createStore} from "redux";
+import userReducer from "./reducers/userReducer";
+import {addUser} from "./actions/userActions";
+
+
 const AppNavigator = createStackNavigator({
   login: { screen: LoginScreen },
   signup: { screen: SignupScreen },
@@ -20,12 +26,20 @@ const AppNavigator = createStackNavigator({
   initialRouteName: "home"
 });
 
-const AppContainer = createAppContainer(AppNavigator);
+
+const mapDispatchToProps = dispatch => (
+    bindActionCreators({
+      addUser
+    }, dispatch)
+);
+
+const AppContainer = connect(mapDispatchToProps)(createAppContainer(AppNavigator));
 
 export default class App extends React.Component {
 
   constructor(props) {
     super(props);
+    this.store = createStore(userReducer);
     this.state = {
       loading: true
     }
@@ -45,10 +59,13 @@ export default class App extends React.Component {
       return <AppLoading />
     } else {
       return (
-        <Root>
-          <AppContainer />
-        </Root>
+        <Provider store={this.store}>
+          <Root>
+            <AppContainer />
+          </Root>
+        </Provider>
       )
     }
   }
 }
+

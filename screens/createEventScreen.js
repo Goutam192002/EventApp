@@ -1,15 +1,14 @@
 import React from 'react';
 import {Button, Container, Form, Input, Item, Text, Textarea} from "native-base";
-import { AsyncStorage, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import axios from 'axios';
+import {connect} from "react-redux";
 
-export default class createEventScreen extends React.Component{
+ class createEventScreen extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            user: {},
-            authToken: '',
             title: '',
             description: '',
             createdBy: '',
@@ -19,11 +18,8 @@ export default class createEventScreen extends React.Component{
 
     async componentWillMount() {
         try {
-            const user = JSON.parse(await AsyncStorage.getItem('user'));
-            const authToken = await AsyncStorage.getItem('authToken');
+            const user = this.props.user.user;
             this.setState({ createdBy: user.id });
-            this.setState({ user: user});
-            this.setState({ authToken: authToken});
         } catch (error) {
             console.log(error)
         }
@@ -89,4 +85,11 @@ const styles = StyleSheet.create({
         margin: 5,
     }
 });
+
+const mapStateToProps = state => {
+ const { user } = state;
+ return user;
+};
+
+export default connect(mapStateToProps)(createEventScreen)
 

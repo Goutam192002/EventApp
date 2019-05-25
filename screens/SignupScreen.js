@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, Container, Content, Form, Item, Input, Button, Toast} from "native-base";
 import axios from 'axios';
+import { StyleSheet } from 'react-native';
 
 export default class SignupScreen extends  React.Component {
     constructor(props) {

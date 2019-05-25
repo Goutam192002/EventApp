@@ -1,10 +1,10 @@
 import React from 'react';
 import { Container, Fab, Icon } from 'native-base';
-import {AsyncStorage} from "react-native";
 import {createMaterialTopTabNavigator, createAppContainer} from "react-navigation";
 import createdEvents from "../components/createdEvents";
 import invitedEvents from "../components/invitedEvents";
 import AppLoading from "expo/build/launch/AppLoading";
+import {connect} from "react-redux";
 
 
 const navigator = createMaterialTopTabNavigator({
@@ -14,7 +14,7 @@ const navigator = createMaterialTopTabNavigator({
 
 const TabNavigator = createAppContainer(navigator);
 
-export default class LoginScreen extends React.Component {
+class HomeScreen extends React.Component {
 
     constructor(props) {
         super(props);
@@ -24,16 +24,11 @@ export default class LoginScreen extends React.Component {
     }
 
     async componentWillMount() {
-        try {
-            const token = await AsyncStorage.getItem('authToken');
-            const user = JSON.parse(await AsyncStorage.getItem('user'));
-            if(!token || !user) {
-                this.props.navigation.navigate('login')
-            }
-            this.setState({ loading: false})
-        } catch (error) {
-            console.log(error);
-            this.props.navigation.navigate('login')
+        const user = this.props.user.user;
+        if(user) {
+            this.setState({ loading: false});
+        } else {
+            this.props.navigation.navigate('login');
         }
     }
 
@@ -56,3 +51,10 @@ export default class LoginScreen extends React.Component {
         }
     }
 }
+
+const mapStateToProps = state => {
+    const { user } = state;
+    return user
+};
+
+export default connect(mapStateToProps)(HomeScreen)
