@@ -38,7 +38,14 @@ class LoginScreen extends React.Component{
           user = res.data;
           await AsyncStorage.setItem('user', JSON.stringify(user));
           await AsyncStorage.setItem('authToken', authToken);
-          await this.props.addUser({ user: user, 'authToken': authToken});
+          await this.props.addUser( new Promise( (resolve, reject) => {
+              if (user && authToken) {
+                  resolve({user: user, 'authToken': authToken})
+              } else {
+                  reject(false)
+              }
+          })
+        );
           this.props.navigation.navigate('home')
       } catch(error) {
           Toast.show({
