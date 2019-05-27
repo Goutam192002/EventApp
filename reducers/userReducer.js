@@ -2,7 +2,8 @@ import { combineReducers } from "redux";
 import { AsyncStorage } from 'react-native';
 
 const INITIAL_STATE = {
-    user: { ...JSON.parse(AsyncStorage.getItem('user')), authToken: AsyncStorage.getItem('authToken') }
+    user: AsyncStorage.getItem('user'),
+    authToken: AsyncStorage.getItem('authToken')
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {

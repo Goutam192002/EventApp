@@ -24,12 +24,15 @@ class HomeScreen extends React.Component {
     }
 
     async componentWillMount() {
-        const user = this.props.user.user;
-        if(user) {
-            this.setState({ loading: false});
-        } else {
-            this.props.navigation.navigate('login');
-        }
+        const user = this.props.user;
+        user.then( user => {
+            console.log(user);
+            if(user) {
+                this.setState({ loading: false});
+            } else {
+                this.props.navigation.navigate('login');
+            }
+        });
     }
 
     render() {
